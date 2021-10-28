@@ -40,10 +40,11 @@ const homieS = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
 homieS.forEach(elem => {
     axios
         //GET => Get data / Send http get request / PROMISE
-        .get(`https://api.github.com/users/${elem}/followers`)
+        .get(`https://api.github.com/users/${elem}`)
         //THEN => IF we received what is was supposed to get then do this:
         .then(res => {
-
+            let info = res.data
+            containeR.appendChild(cardMaker(info));
         })
         //CATCH => If failed/did not receive do this:
         .catch(err => {
@@ -63,9 +64,9 @@ const followersArray = [];
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:*/
 
-containeR = document.querySelector('.cards');
+const containeR = document.querySelector('.cards');
 
-function cardMaker({avatar_url, name, login, location, url, followers, following, bio}) {
+function cardMaker({avatar_url, name, login, location, html_url, followers, following, bio}) {
     const gitCard = document.createElement('div');
     const imgUser = document.createElement('img');
     const infoCard = document.createElement('div');
@@ -73,22 +74,18 @@ function cardMaker({avatar_url, name, login, location, url, followers, following
     const nameUser = document.createElement('p');
     const loCation = document.createElement('p');
     const proFile = document.createElement('p');
-    const aHref = document.createElement('a');
+    const address1 = document.createElement('a');
     const folloWers = document.createElement('p');
     const folloWing = document.createElement('p');
     const biO = document.createElement('p');
 
-    gitCard.append( imgUser, infoCard );
-    infoCard.append( names, nameUser, loCation, proFile, folloWers, folloWing, biO );
-    proFile.appendChild(aHref);
-
-    imgUser.textContent = avatar_url;
-    proFile.textContent = 'Profile: '
+    imgUser.src = avatar_url;
+    proFile.textContent = `Profile: `
     names.textContent = name;
     nameUser.textContent = login;
     loCation.textContent = `location: ${location}`;
-    aHref.href = url;
-    aHref.textContent = url;
+    address1.textContent = html_url;
+    address1.href = html_url;
     folloWers.textContent = `Followers: ${followers}`;
     folloWing.textContent = `Following: ${following}`;
     biO.textContent = `Bio: ${bio}`;
@@ -98,8 +95,9 @@ function cardMaker({avatar_url, name, login, location, url, followers, following
     names.classList.add('name');
     nameUser.classList.add('username');
 
-
-
+    gitCard.append( imgUser, infoCard );
+    infoCard.append( names, nameUser, loCation, proFile, folloWers, folloWing, biO );
+    proFile.append(address1);
 
     return gitCard;
 }
